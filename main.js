@@ -21,17 +21,11 @@ const ModelSwitcher = require('./model-switcher'); // 🔄 模型切换器
 // Windows透明窗口修复 — 禁用硬件加速彻底解决浅色背景矩形框
 app.disableHardwareAcceleration();
 
-// 🦾 Jarvis版本信息
-const JARVIS_VERSION = '2.1.0-jarvis';
-console.log(`🦞 Jarvis KKClaw 启动中... v${JARVIS_VERSION}`);
-console.log(`🎯 目标服务器: ${process.env.OPENCLAW_GATEWAY_URL || 'http://100.96.37.38:18789'}`);
-
-// 🔒 单实例锁 - 防止重复启动
+// 单实例锁 - 防止重复启动
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
   // 已有实例在运行，退出当前进程
-  console.log('⚠️ Jarvis已在运行，聚焦到已有窗口');
   app.quit();
 } else {
   // 当第二个实例尝试启动时，聚焦到已有窗口
@@ -270,7 +264,7 @@ async function createWindow() {
     workLogger.logError(`Gateway 重启次数过多 (${info.restartHistory.length} 次)，进入低频监控`);
 
     new Notification({
-      title: 'Jarvis 异常',
+      title: 'OpenClaw Gateway 异常',
       body: 'Gateway 频繁重启，已进入低频监控模式。',
       icon: path.join(__dirname, 'icon.png')
     }).show();
@@ -560,7 +554,7 @@ async function createWindow() {
         {
           label: '▶️ 启动 Gateway',
           click: async () => {
-            showServiceNotification('正在启动...', 'Jarvis');
+            showServiceNotification('正在启动...', 'KKClaw');
             const result = await serviceManager.startGateway();
             if (result.success) {
               showServiceNotification('启动成功', 'Jarvis 已启动');
@@ -572,15 +566,15 @@ async function createWindow() {
         {
           label: '⏹️ 停止 Gateway',
           click: async () => {
-            showServiceNotification('正在停止...', 'Jarvis');
+            showServiceNotification('正在停止...', 'KKClaw');
             await serviceManager.stopGateway();
-            showServiceNotification('已停止', 'Jarvis');
+            showServiceNotification('已停止', 'KKClaw');
           }
         },
         {
           label: '🔄 重启 Gateway',
           click: async () => {
-            showServiceNotification('正在重启...', 'Jarvis');
+            showServiceNotification('正在重启...', 'KKClaw');
             const result = await serviceManager.restartGateway();
             if (result.success) {
               showServiceNotification('重启成功', 'Jarvis 已重新启动');
@@ -711,7 +705,7 @@ function rebuildTrayMenu() {
         {
           label: '▶️ 启动 Gateway',
           click: async () => {
-            showServiceNotification('正在启动...', 'Jarvis');
+            showServiceNotification('正在启动...', 'KKClaw');
             const result = await serviceManager.startGateway();
             if (result.success) showServiceNotification('启动成功', 'Jarvis 已启动');
             else showServiceNotification('启动失败', result.error || '未知错误');
@@ -720,15 +714,15 @@ function rebuildTrayMenu() {
         {
           label: '⏹️ 停止 Gateway',
           click: async () => {
-            showServiceNotification('正在停止...', 'Jarvis');
+            showServiceNotification('正在停止...', 'KKClaw');
             await serviceManager.stopGateway();
-            showServiceNotification('已停止', 'Jarvis');
+            showServiceNotification('已停止', 'KKClaw');
           }
         },
         {
           label: '🔄 重启 Gateway',
           click: async () => {
-            showServiceNotification('正在重启...', 'Jarvis');
+            showServiceNotification('正在重启...', 'KKClaw');
             const result = await serviceManager.restartGateway();
             if (result.success) showServiceNotification('重启成功', 'Jarvis 已重新启动');
             else showServiceNotification('重启失败', result.error || '未知错误');
@@ -793,7 +787,7 @@ function openModelSettings() {
   modelSettingsWindow = new BrowserWindow({
     width: 520,
     height: 640,
-    title: '🤖 Jarvis Switch',
+    title: 'KKClaw Switch',
     resizable: true,
     minimizable: true,
     maximizable: false,
