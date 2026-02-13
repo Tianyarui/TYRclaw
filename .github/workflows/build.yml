@@ -20,19 +20,13 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm install
-    - name: Debug - List files
-      run: dir && echo "---" && dir *.ico
-    - name: Build Windows executable
-      run: |
-        echo "Running build..."
-        npm run build:win || echo "Build failed, checking error..."
-        if not exist dist\*.exe dir dist
+    - name: Build Windows (simple)
+      run: npx electron-builder --win --x64 --dir
     - name: Upload artifact
-      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: Windows-exe
-        path: dist/*.exe
+        name: Windows-dir
+        path: dist/win-unpacked
         retention-days: 5
         
   build-mac:
@@ -48,11 +42,10 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Build macOS DMG
-      run: npm run build:mac
+      run: npx electron-builder --mac --x64 --arm64
     - name: Upload artifact
-      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: macOS-dmg
-        path: dist/*.dmg
+        path: dist
         retention-days: 5
